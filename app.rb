@@ -19,7 +19,7 @@ post '/approvals' do
       if approvals.empty? || !approvals.include?(payload['issue']['id'])
         approvals.push(payload['issue']['id'])
       else
-        Octokit.add_comment(payload['repository']['owner']['login'], payload['repository']['name'],payload['issue']['number'],'run tests')
+        Octokit.add_comment({:owner => payload['repository']['owner']['login'], :name => payload['repository']['name']},payload['issue']['number'],'run tests')
         approvals.delete(payload['issue']['id'])
       end
       File.open(TEMP_FILE, 'w') {|f| f.write(Marshal.dump(approvals)) }
